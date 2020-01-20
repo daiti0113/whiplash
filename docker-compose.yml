@@ -1,0 +1,26 @@
+version: '3'
+services:
+  db:
+    # 既存のmysqlイメージを使う
+    image: mysql
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - '3316:3306'
+    # データを永続化する際にマウントするディレクトリ
+    volumes:
+      - ./db/mysql/volumes:/var/lib/mysql
+
+
+  web:
+    # Dockerfileからイメージをビルドする
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    # データを永続化する際にマウントするディレクトリ
+    volumes:
+      - .:/whiplash
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
