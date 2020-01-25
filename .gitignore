@@ -22,3 +22,5 @@
 /config/master.key
 
 *.pem
+
+/db
