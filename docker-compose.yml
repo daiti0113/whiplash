@@ -3,11 +3,14 @@ services:
   db:
     # 既存のmysqlイメージを使う
     image: mysql
+    # mysql8.0からデフォルトの認証形式がcaching_sha2_passwordになっているので、
+    # mysql_native_passwordに変更する
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_USER: root
       MYSQL_ROOT_PASSWORD: password
     ports:
-      - '3316:3306'
+      - '3306:3306'
     # データを永続化する際にマウントするディレクトリ
     volumes:
       - ./db/mysql/volumes:/var/lib/mysql
@@ -16,7 +19,7 @@ services:
   web:
     # Dockerfileからイメージをビルドする
     build: .
-    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     # データを永続化する際にマウントするディレクトリ
     volumes:
       - .:/whiplash
