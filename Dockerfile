@@ -23,4 +23,8 @@ ADD Gemfile.lock /app/Gemfile.lock
 RUN bundle install
 
 # カレントディレクトリのファイルをコンテナ内の指定したディレクトリにコピーする
+# 新規プロジェクトであっても、rails new で新しく追加されたgemをインストールするためイメージを再ビルドする際に必要になる
 ADD . /whiplash
+
+
+# 既存のプロジェクトの場合は、カレントディレクトリのすべてのファイルをADDして、その後bundle installしたほうがいい？？
